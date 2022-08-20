@@ -61,7 +61,7 @@ resource "aws_instance" "GCSv5UbuntuNodes" {
 }
 resource "aws_instance" "GCSv5Rocky8Nodes" {
   count = 1
-  ami           = "Rocky-8-ec2-8.6-20220515.0.x86_64-d6577ceb-8ea8-4e0e-84c6-f098fc302e82"
+  ami           = "ami-08882eba49067074f"
   key_name = "KUBE20211112"
   instance_type = "t2.micro"
   vpc_security_group_ids = ["sg-061065abfa8528d29"]
