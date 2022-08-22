@@ -37,28 +37,27 @@ resource "aws_instance" "GCSv4Nodes" {
   instance_type = "t2.micro"
   vpc_security_group_ids = ["sg-061065abfa8528d29"]
   provisioner "local-exec" {
-    command = "echo ${aws_instance.GCSv4Nodes[count.index].tags.Name} ansible_host=${aws_instance.GCSv4Nodes[count.index].public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/jkube/.ssh/KUBE20211112.pem>>inventory"
+    command = "echo ${aws_instance.GCSv4Nodes[count.index].tags.Name} ansible_host=${aws_instance.GCSv4Nodes[count.index].public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/jkube/.ssh/KUBE20211112.pem clientID=>>inventory"
 	  }
-
   tags = {
     Name = "Ubuntu-GCSv4-Node${count.index}"
   }
 }
+
 resource "aws_instance" "GCSv5UbuntuNodes" {
   count = 2
   ami           = "ami-06ad98dc9c4e046bd" #ami-06ad98dc9c4e046bd   2022-08-10T20:12:56.000Z
   key_name = "KUBE20211112"
   instance_type = "t2.micro"
   vpc_security_group_ids = ["sg-061065abfa8528d29"]
-  provisioner "local-exec" {
-#command = "echo ${aws_instance.GCSv5UbuntuNodes[count.index].tags.Name} ansible_host=${aws_instance.GCSv5UbuntuNodes[count.index].public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/jkube/.ssh/KUBE20211112.pem>>inventory"
-    command = "echo ${self.tags.Name} ansible_host=${self.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/jkube/.ssh/KUBE20211112.pem>>inventory"
+  provisioner "local-exec"{
+    command = "echo ${self.tags.Name} ansible_host=${self.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/jkube/.ssh/KUBE20211112.pem ${var.GCSv5Ubuntu[count.index]}} globus_owner=${var.GCSv5OwnerSTring} globus_org=${var.GCSv5OrgSTring}>>inventory"
 	  }
-
   tags = {
     Name = "Ubuntu-GCSv5-Node${count.index}"
   }
 }
+
 resource "aws_instance" "GCSv5Rocky8Nodes" {
   count = 1
   ami           = "ami-08882eba49067074f"
@@ -66,13 +65,8 @@ resource "aws_instance" "GCSv5Rocky8Nodes" {
   instance_type = "t2.micro"
   vpc_security_group_ids = ["sg-061065abfa8528d29"]
   provisioner "local-exec" {
-    command = "echo ${aws_instance.GCSv5Rocky8Nodes[count.index].tags.Name} ansible_host=${aws_instance.GCSv5Rocky8Nodes[count.index].public_ip} ansible_user=rocky ansible_ssh_private_key_file=/home/jkube/.ssh/KUBE20211112.pem>>inventory"
+   command = "echo ${aws_instance.GCSv5Rocky8Nodes[count.index].tags.Name} ansible_host=${aws_instance.GCSv5Rocky8Nodes[count.index].public_ip} ansible_user=rocky ansible_ssh_private_key_file=/home/jkube/.ssh/KUBE20211112.pem ${var.GCSv5Ubuntu[count.index]}} globus_owner=${var.GCSv5OwnerSTring} globus_org=${var.GCSv5OrgSTring}>>inventory"
 	  }
-#;provisioner "local-exec" {
-#;command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -u centos -i aws_instance.  --private-key /home/jkube/.ssh/id_rsa -e /home/jkube/workspace/git/Globus/ansible/TST/globus_GCS_centosSetup.yml"
-#;}
-
-
   tags = {
     Name = "Rocky8-GCSv5-Node${count.index}"
   }
